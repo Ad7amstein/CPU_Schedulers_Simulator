@@ -12,6 +12,8 @@ public class Process
     public int AG_factor ;
     public int randomNumber;
     public int QuantumTime;
+    public int WaitingTime;
+    public int TurnaroundTime;
 
     Process(String Name , String Color , int ArrivalTime , int BurstTime , int PriorityNumber , int QuantumTime )
     {
@@ -47,6 +49,24 @@ public class Process
     int GetAgFactor ()
     {
         return AG_factor;
+    }
+    public Process(String Name, int ArrivalTime, int BurstTime, int PriorityNumber){
+        this.Name = Name;;
+        this.ArrivalTime = ArrivalTime;
+        this.BurstTime = BurstTime;
+        this.PriorityNumber = PriorityNumber;
+        this.WaitingTime=0;
+    }
+    public void aging() {
+        if (WaitingTime >= 5) {
+            this.PriorityNumber--;
+            this.WaitingTime = 0;
+        } else {
+            this.WaitingTime++;
+        }
+    }
+    public int getPriority() {
+        return PriorityNumber;
     }
     public void print(){
         // System.out.println("CompleteTime = " + CompleteTime + " " + "ArrivalTime = " + ArrivalTime +" " +  "BurstTime ="+BurstTime2 );
