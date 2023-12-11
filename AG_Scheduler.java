@@ -10,7 +10,7 @@ public class AG_Scheduler {
     Deque<Process> readyQueue = new ArrayDeque<>();
     Process lead;
     int Time = 0;
-    Deque<Process> processes_list;
+    Deque<Process> processes_list = new ArrayDeque<>();
     Deque<Process> complete_list = new ArrayDeque<>();
 
     void AddToQueue() {
@@ -126,9 +126,14 @@ public class AG_Scheduler {
     }
 
     void fun(Deque<Process> Plist) {
-        processes_list = Plist;
         Iterator<Process> iterator = Plist.iterator();
 
+        while (iterator.hasNext()) {
+            Process element = iterator.next();
+            Process p = Main.copyProcess(element);
+            processes_list.addLast(p);
+        }
+        iterator = processes_list.iterator();
         while (iterator.hasNext()) {
             Process p2 = iterator.next();
             if (p2.ArrivalTime == 0)

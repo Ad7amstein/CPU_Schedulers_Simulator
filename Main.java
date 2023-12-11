@@ -22,13 +22,13 @@ public class Main
             for(int i = 0 ;i < NumberOfProcesses ; i++)
             {
                 scanner.nextLine() ;
-                System.out.print("Name: ");
+                // System.out.print("Name: ");
                 String Name = scanner.next();
-                System.out.print("Arrival Time: ");
-                int ArrivalTime = scanner.nextInt();
-                System.out.print("Burst Time: ");
+                // System.out.print("Burst Time: ");
                 int BurstTime = scanner.nextInt();
-                System.out.print("Priority Number: ");
+                // System.out.print("Arrival Time: ");
+                int ArrivalTime = scanner.nextInt();
+                // System.out.print("Priority Number: ");
                 int PriorityNumber = scanner.nextInt();
                 Process p = new Process(Name , "Color" , ArrivalTime, BurstTime , PriorityNumber , QuantumTime);
                 p.CalcAgFactorAndCompleteTime(-1,-1);
@@ -37,14 +37,19 @@ public class Main
                 p1.add(p2);
             }
         }
-        S3.priorityScheduling(p1);
         S4.fun(processes);
         System.out.println("Name    WaitingTime    TurnAroundTime");
         Iterator<Process> iterator = S4.complete_list.iterator();
-
         while (iterator.hasNext())
         {
             iterator.next().print();
         }
+
+        S3.priorityScheduling(p1);
+    }
+
+    public static Process copyProcess(Process p){
+        Process p2 = new Process(p.Name, p.Color, p.ArrivalTime, p.BurstTime, p.PriorityNumber, p.QuantumTime);
+        return p2;
     }
 }
