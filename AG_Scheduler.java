@@ -12,6 +12,8 @@ import java.util.Deque;
 import java.util.List;
 public class AG_Scheduler {
     Deque<Process> deq = new ArrayDeque<>();
+    Deque<Process> readyQueue = new ArrayDeque<>();
+    Process lead;
     int Time = 0;
     Deque<Process> processes_list ;
     Deque<Process> complete_list = new ArrayDeque<>();
@@ -25,6 +27,7 @@ public class AG_Scheduler {
                 processes_list.remove(element);
             }
         }
+        sortAg();
     }
 
     int CheckAGFactor(int AGF){
@@ -52,14 +55,14 @@ public class AG_Scheduler {
     }
 
     void UpdateQuantumTime(int workTime) {
-        if (deq.getFirst().BurstTime == 0){
-            deq.getFirst().QuantumTime = 0;
+        if (lead.BurstTime == 0){
+            lead.QuantumTime = 0;
         }
-        else if (workTime == deq.getFirst().QuantumTime){
-            deq.getFirst().QuantumTime += calcNewQuantumTime();
+        else if (workTime == lead.QuantumTime){
+            lead.QuantumTime += calcNewQuantumTime();
         }
-        else if (workTime < deq.getFirst().QuantumTime){
-            deq.getFirst().QuantumTime += deq.getFirst().QuantumTime - workTime;
+        else if (workTime < lead.QuantumTime){
+            lead.QuantumTime += lead.QuantumTime - workTime;
         }
     }
     void sortAg()
@@ -70,46 +73,46 @@ public class AG_Scheduler {
         ArrayDeque<Process> ad = new ArrayDeque<>(list);
         deq = ad ;
     }
+
     void select() {
-        sortAg();
         System.out.println(Time + " ");
-        System.out.println(deq.getFirst().Name);
-        int workTime = Math.min((deq.getFirst().QuantumTime + 1) / 2, deq.getFirst().BurstTime);
+        System.out.println(lead.Name);
+        int workTime = Math.min((lead.QuantumTime + 1) / 2, lead.BurstTime);
         Time += workTime;
-        deq.getFirst().BurstTime -= workTime;
+        lead.BurstTime -= workTime;
         AddToQueue();
-        for (int i = workTime; i <= deq.getFirst().QuantumTime; ++i){
-            if (deq.getFirst().BurstTime == 0) {
+        for (int i = workTime; i <= lead.QuantumTime; ++i){
+            if (lead.BurstTime == 0) {
                 UpdateQuantumTime(workTime);
-                Process tmp = new Process(deq.getFirst().Name , deq.getFirst().Color,deq.getFirst().ArrivalTime , deq.getFirst().BurstTime ,deq.getFirst().PriorityNumber, deq.getFirst().QuantumTime);
-                tmp.CalcAgFactorAndCompleteTime(deq.getFirst().AG_factor , Time);
+                Process tmp = new Process(lead.Name , lead.Color,lead.ArrivalTime , lead.BurstTime ,lead.PriorityNumber, lead.QuantumTime);
+                tmp.CalcAgFactorAndCompleteTime(lead.AG_factor , Time);
                 complete_list.addLast(tmp);
-                deq.removeFirst();
+                deq.remove(tmp);
+                readyQueue.remove(tmp);
                 break;
             }
-            else if (workTime == deq.getFirst().QuantumTime){
+            else if (workTime == lead.QuantumTime){
                 UpdateQuantumTime(workTime);
-                Process tmp = new Process(deq.getFirst().Name , deq.getFirst().Color,deq.getFirst().ArrivalTime , deq.getFirst().BurstTime ,deq.getFirst().PriorityNumber, deq.getFirst().QuantumTime);
-                tmp.CalcAgFactorAndCompleteTime(deq.getFirst().AG_factor , -1);
-                deq.addLast(tmp);
-                deq.removeFirst();
+                Process tmp = new Process(lead.Name , lead.Color,lead.ArrivalTime , lead.BurstTime ,lead.PriorityNumber, lead.QuantumTime);
+                tmp.CalcAgFactorAndCompleteTime(lead.AG_factor , -1);
+                lead = readyQueue.getFirst();
+                readyQueue.addLast(tmp);
                 break;
             }
-            else if (CheckAGFactor(deq.getFirst().AG_factor) != 0) {
+            else if (deq.getFirst().AG_factor < lead.AG_factor) {
                 UpdateQuantumTime(workTime);
-                Process tmp = new Process(deq.getFirst().Name , deq.getFirst().Color,deq.getFirst().ArrivalTime , deq.getFirst().BurstTime ,deq.getFirst().PriorityNumber, deq.getFirst().QuantumTime);
-                tmp.CalcAgFactorAndCompleteTime(deq.getFirst().AG_factor , -1);
-                deq.removeFirst();
-                deq.addLast(tmp);
+                Process tmp = new Process(lead.Name , lead.Color,lead.ArrivalTime , lead.BurstTime ,lead.PriorityNumber, lead.QuantumTime);
+                tmp.CalcAgFactorAndCompleteTime(lead.AG_factor , -1);
+                readyQueue.addLast(tmp);
+                lead = deq.getFirst();
                 break;
             }
             Time++;
             AddToQueue();
             workTime++;
-            deq.getFirst().BurstTime-=1;
+            lead.BurstTime-=1;
         }
         System.out.println(Time + " ");
-
     }
 
     void fun(Deque<Process> Plist) {
@@ -128,13 +131,17 @@ public class AG_Scheduler {
             else if (p2.ArrivalTime == 29)
                 p2.AG_factor = 43 ;
         }
+        int i = 0;
         while (processes_list.size() != 0 || deq.size() != 0) {
             AddToQueue();
             while (deq.size() == 0) {
                 Time++;
                 AddToQueue();
             }
+            if (i == 0)
+                lead = deq.getFirst();
             select();
+            i++;
         }
     }
 }
