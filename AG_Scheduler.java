@@ -5,11 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Comparator;
 
-public class AG_Scheduler {
+public class AG_Scheduler{
     Deque<Process> deq = new ArrayDeque<>();
     Deque<Process> readyQueue = new ArrayDeque<>();
     Process lead;
-    int Time = 0;
+    int time = 0;
     Deque<Process> processes_list = new ArrayDeque<>();
     Deque<Process> complete_list = new ArrayDeque<>();
 
@@ -19,7 +19,7 @@ public class AG_Scheduler {
         Iterator<Process> iterator = processes_list.iterator();
         while (iterator.hasNext()) {
             Process element = iterator.next();
-            if (Time >= element.ArrivalTime) {
+            if (time >= element.arrivalTime) {
                 deq.add(element);
                 iterator.remove();
             }
@@ -31,18 +31,18 @@ public class AG_Scheduler {
         Iterator<Process> iterator = deq.iterator();
         int sum = 0;
         while (iterator.hasNext()) {
-            sum += iterator.next().QuantumTime;
+            sum += iterator.next().quantumTime;
         }
         return (int) Math.ceil(0.1 * sum / deq.size());
     }
 
     void UpdateQuantumTime(int workTime) {
-        if (lead.BurstTime == 0) {
-            lead.QuantumTime = 0;
-        } else if (workTime == lead.QuantumTime) {
-            lead.QuantumTime += calcNewQuantumTime();
-        } else if (workTime < lead.QuantumTime) {
-            lead.QuantumTime += lead.QuantumTime - workTime;
+        if (lead.burstTime == 0) {
+            lead.quantumTime = 0;
+        } else if (workTime == lead.quantumTime) {
+            lead.quantumTime += calcNewQuantumTime();
+        } else if (workTime < lead.quantumTime) {
+            lead.quantumTime += lead.quantumTime - workTime;
         }
     }
 
@@ -61,14 +61,14 @@ public class AG_Scheduler {
         Iterator<Process> iterator = deq.iterator();
         while (iterator.hasNext()) {
             Process element = iterator.next();
-            if (element.Name.equals(lead.Name)) {
+            if (element.name.equals(lead.name)) {
                 iterator.remove();
             }
         }
         iterator = readyQueue.iterator();
         while (iterator.hasNext()) {
             Process element = iterator.next();
-            if (element.Name.equals(lead.Name)) {
+            if (element.name.equals(lead.name)) {
                 iterator.remove();
             }
         }
@@ -90,42 +90,42 @@ public class AG_Scheduler {
     }
 
     void select() {
-        System.out.print(Time + ":");
-        System.out.print("(" + lead.Name + ")");
-        int workTime = Math.min((lead.QuantumTime + 1) / 2, lead.BurstTime);
-        Time += workTime;
-        lead.BurstTime -= workTime;
+        System.out.print(time + ":");
+        System.out.print("(" + lead.name + ")");
+        int workTime = Math.min((lead.quantumTime + 1) / 2, lead.burstTime);
+        time += workTime;
+        lead.burstTime -= workTime;
         AddToQueue();
-        if (workTime == lead.QuantumTime) {
+        if (workTime == lead.quantumTime) {
             UpdateLead(null);
         }
-        for (int i = workTime; i <= lead.QuantumTime; ++i) {
-            if (lead.BurstTime == 0) {
-                lead.CompleteTime = Time;
+        for (int i = workTime; i <= lead.quantumTime; ++i) {
+            if (lead.burstTime == 0) {
+                lead.completeTime = time;
                 UpdateQuantumTime(workTime);
                 addToCompleteList();
                 UpdateLead(null);
                 break;
-            } else if (workTime == lead.QuantumTime) {
+            } else if (workTime == lead.quantumTime) {
                 UpdateQuantumTime(workTime);
                 readyQueue.addLast(lead);
                 UpdateLead(null);
                 break;
-            } else if (!deq.isEmpty() && deq.getFirst().AG_factor < lead.AG_factor) {
+            } else if (!deq.isEmpty() && deq.getFirst().AGFactor < lead.AGFactor) {
                 UpdateQuantumTime(workTime);
                 readyQueue.addLast(lead);
                 UpdateLead(deq.getFirst());
                 break;
             }
-            Time++;
+            time++;
             AddToQueue();
             workTime++;
-            lead.BurstTime -= 1;
+            lead.burstTime -= 1;
         }
-        System.out.println(":" + Time);
+        System.out.println(":" + time);
     }
 
-    void fun(Deque<Process> Plist) {
+    void schedule(Deque<Process> Plist) {
         Iterator<Process> iterator = Plist.iterator();
 
         while (iterator.hasNext()) {
@@ -136,20 +136,20 @@ public class AG_Scheduler {
         iterator = processes_list.iterator();
         while (iterator.hasNext()) {
             Process p2 = iterator.next();
-            if (p2.ArrivalTime == 0)
-                p2.AG_factor = 20;
-            else if (p2.ArrivalTime == 3)
-                p2.AG_factor = 17;
-            else if (p2.ArrivalTime == 4)
-                p2.AG_factor = 16;
-            else if (p2.ArrivalTime == 29)
-                p2.AG_factor = 43;
+            if (p2.arrivalTime == 0)
+                p2.AGFactor = 20;
+            else if (p2.arrivalTime == 3)
+                p2.AGFactor = 17;
+            else if (p2.arrivalTime == 4)
+                p2.AGFactor = 16;
+            else if (p2.arrivalTime == 29)
+                p2.AGFactor = 43;
         }
         int i = 0;
         while (!processes_list.isEmpty() || !deq.isEmpty() || lead != null) {
             AddToQueue();
             while (deq.isEmpty()) {
-                Time++;
+                time++;
                 AddToQueue();
             }
             if (i == 0)

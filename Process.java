@@ -1,28 +1,29 @@
 import java.util.Random;
 
 public class Process {
-    public String Name;
-    public String Color;
-    public int ArrivalTime;
-    public int BurstTime;
-    public int BurstTime2;
-    public int PriorityNumber;
-    public int CompleteTime;
-    public int AG_factor;
+    public String name;
+    public String color;
+    public int arrivalTime;
+    public int burstTime;
+    public int burstTime2;
+    public int priorityNumber;
+    public int completeTime;
+    public int AGFactor;
     public int randomNumber;
-    public int QuantumTime;
-    public int WaitingTime;
-    public int TurnaroundTime;
+    public int quantumTime;
+    public int waitingTime;
+    public int turnaroundTime;
 
     Process(String Name, String Color, int ArrivalTime, int BurstTime, int PriorityNumber, int QuantumTime) {
-        this.Name = Name;
-        this.Color = Color;
-        this.ArrivalTime = ArrivalTime;
-        this.BurstTime = BurstTime;
-        this.BurstTime2 = BurstTime;
-        this.PriorityNumber = PriorityNumber;
-        this.QuantumTime = QuantumTime;
-
+        this.name = Name;
+        this.color = Color;
+        this.arrivalTime = ArrivalTime;
+        this.burstTime = BurstTime;
+        this.burstTime2 = BurstTime;
+        this.priorityNumber = PriorityNumber;
+        this.quantumTime = QuantumTime;
+        waitingTime = 0;
+        completeTime = 0;
     }
 
     void CalcAgFactorAndCompleteTime(int n, int m) {
@@ -30,50 +31,40 @@ public class Process {
             Random random = new Random();
             randomNumber = random.nextInt(21);
             if (randomNumber < 10)
-                AG_factor = randomNumber + ArrivalTime + AG_factor;
+                AGFactor = randomNumber + arrivalTime + AGFactor;
             else if (randomNumber > 10)
-                AG_factor = 10 + ArrivalTime + AG_factor;
+                AGFactor = 10 + arrivalTime + AGFactor;
             else
-                AG_factor = PriorityNumber + ArrivalTime + AG_factor;
+                AGFactor = priorityNumber + arrivalTime + AGFactor;
         } else
-            AG_factor = n;
+            AGFactor = n;
         if (m == -1)
-            CompleteTime = 0;
+            completeTime = 0;
         else
-            CompleteTime = m;
+            completeTime = m;
     }
 
     int GetAgFactor() {
-        return AG_factor;
+        return AGFactor;
     }
-
-    public Process(String Name, int ArrivalTime, int BurstTime, int PriorityNumber) {
-        this.Name = Name;
-        ;
-        this.ArrivalTime = ArrivalTime;
-        this.BurstTime = BurstTime;
-        this.PriorityNumber = PriorityNumber;
-        this.WaitingTime = 0;
-    }
-
     public void aging() {
-        if (WaitingTime >= 5) {
-            this.PriorityNumber--;
-            this.WaitingTime = 0;
+        if (waitingTime >= 5) {
+            this.priorityNumber--;
+            this.waitingTime = 0;
         } else {
-            this.WaitingTime++;
+            this.waitingTime++;
         }
     }
 
     public int getPriority() {
-        return PriorityNumber;
+        return priorityNumber;
     }
 
     public void print() {
         // System.out.println("CompleteTime = " + CompleteTime + " " + "ArrivalTime = "
         // + ArrivalTime +" " + "BurstTime ="+BurstTime2 );
-        int WaitingTime = CompleteTime - BurstTime2,
-                turnAroundTime = WaitingTime + BurstTime2;
-        System.out.println(Name + "           " + WaitingTime + "              " + turnAroundTime);
+        int WaitingTime = completeTime - burstTime2 - arrivalTime,
+                turnAroundTime = WaitingTime + burstTime2;
+        System.out.println(name + "           " + WaitingTime + "              " + turnAroundTime);
     }
 }
