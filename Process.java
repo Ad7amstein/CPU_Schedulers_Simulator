@@ -6,23 +6,20 @@ public class Process
     public String Color;
     public int ArrivalTime;
     public int BurstTime;
+    public int BurstTime2;
     public int PriorityNumber;
     public int CompleteTime;
     public int AG_factor ;
     public int randomNumber;
     public int QuantumTime;
-    //    @Override
-//    public String toString() {
-//        return "Process{" +
-//                "AgFactor="+AG_factor +
-//                '}';
-//    }
+
     Process(String Name , String Color , int ArrivalTime , int BurstTime , int PriorityNumber , int QuantumTime )
     {
         this.Name = Name;
         this.Color = Color;
         this.ArrivalTime = ArrivalTime;
         this.BurstTime = BurstTime ;
+        this.BurstTime2 = BurstTime;
         this.PriorityNumber = PriorityNumber ;
         this.QuantumTime=QuantumTime;
 
@@ -52,9 +49,9 @@ public class Process
         return AG_factor;
     }
     public void print(){
-        System.out.println("CompleteTime = " + CompleteTime + " " + "ArrivalTime = " + ArrivalTime +" " +  "BurstTime ="+BurstTime );
+        // System.out.println("CompleteTime = " + CompleteTime + " " + "ArrivalTime = " + ArrivalTime +" " +  "BurstTime ="+BurstTime2 );
         int turnAroundTime = CompleteTime - ArrivalTime,
-                WaitingTime = turnAroundTime - BurstTime;
-        System.out.printf("%-12s %-13d %d%n", Name, WaitingTime, turnAroundTime);
+                WaitingTime = turnAroundTime - BurstTime2;
+        System.out.println(Name + "           " + WaitingTime + "              " + turnAroundTime);
     }
 }
