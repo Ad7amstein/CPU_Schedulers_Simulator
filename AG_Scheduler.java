@@ -87,15 +87,22 @@ public class AG_Scheduler {
                 Process tmp = new Process(lead.Name , lead.Color,lead.ArrivalTime , lead.BurstTime ,lead.PriorityNumber, lead.QuantumTime);
                 tmp.CalcAgFactorAndCompleteTime(lead.AG_factor , Time);
                 complete_list.addLast(tmp);
-                deq.remove(tmp);
-                readyQueue.remove(tmp);
+                deq.remove(lead);
+                Process tmp2 = new Process(readyQueue.getFirst().Name , readyQueue.getFirst().Color,readyQueue.getFirst().ArrivalTime , readyQueue.getFirst().BurstTime ,readyQueue.getFirst().PriorityNumber, readyQueue.getFirst().QuantumTime);
+                tmp2.CalcAgFactorAndCompleteTime(readyQueue.getFirst().AG_factor , Time);
+                lead = tmp2;
+                readyQueue.removeFirst();
                 break;
             }
-            else if (workTime == lead.QuantumTime){
+            else if (workTime == lead.QuantumTime)
+            {
                 UpdateQuantumTime(workTime);
                 Process tmp = new Process(lead.Name , lead.Color,lead.ArrivalTime , lead.BurstTime ,lead.PriorityNumber, lead.QuantumTime);
                 tmp.CalcAgFactorAndCompleteTime(lead.AG_factor , -1);
-                lead = readyQueue.getFirst();
+                Process tmp2 = new Process(readyQueue.getFirst().Name , readyQueue.getFirst().Color,readyQueue.getFirst().ArrivalTime , readyQueue.getFirst().BurstTime ,readyQueue.getFirst().PriorityNumber, readyQueue.getFirst().QuantumTime);
+                tmp2.CalcAgFactorAndCompleteTime(readyQueue.getFirst().AG_factor , Time);
+                lead = tmp2;
+                readyQueue.removeFirst();
                 readyQueue.addLast(tmp);
                 break;
             }
@@ -104,6 +111,7 @@ public class AG_Scheduler {
                 Process tmp = new Process(lead.Name , lead.Color,lead.ArrivalTime , lead.BurstTime ,lead.PriorityNumber, lead.QuantumTime);
                 tmp.CalcAgFactorAndCompleteTime(lead.AG_factor , -1);
                 readyQueue.addLast(tmp);
+//                readyQueue.removeFirst();
                 lead = deq.getFirst();
                 break;
             }
