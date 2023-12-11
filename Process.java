@@ -11,7 +11,7 @@ public class Process
     public int AG_factor ;
     public int randomNumber;
     public int QuantumTime;
-//    @Override
+    //    @Override
 //    public String toString() {
 //        return "Process{" +
 //                "AgFactor="+AG_factor +
