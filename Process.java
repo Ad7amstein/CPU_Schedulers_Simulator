@@ -61,10 +61,10 @@ public class Process {
     }
 
     public void print() {
-        // System.out.println("CompleteTime = " + CompleteTime + " " + "ArrivalTime = "
-        // + ArrivalTime +" " + "BurstTime ="+BurstTime2 );
-        int WaitingTime = completeTime - burstTime2 - arrivalTime,
-                turnAroundTime = WaitingTime + burstTime2;
-        System.out.println(name + "           " + WaitingTime + "              " + turnAroundTime);
+        int waitingTime = completeTime - burstTime2 - arrivalTime,
+                turnAroundTime = waitingTime + burstTime2;
+        this.waitingTime = waitingTime;
+        this.turnaroundTime = turnAroundTime;
+        System.out.println(name + "           " + waitingTime + "              " + turnAroundTime);
     }
 }
