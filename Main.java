@@ -18,10 +18,14 @@ public class Main
         for(int i = 0 ;i < NumberOfProcesses ; i++)
         {
             scanner.nextLine() ;
+            System.out.print("Name: ");
             String Name = scanner.nextLine() ;
             //String Color = scanner.nextLine() ;
+            System.out.print("Burst Time: ");
             int BurstTime = scanner.nextInt();
+            System.out.print("Arrival Time: ");
             int ArrivalTime = scanner.nextInt();
+            System.out.print("Priority Number: ");
             int PriorityNumber = scanner.nextInt();
             Process p = new Process(Name , "Color" , ArrivalTime, BurstTime , PriorityNumber , QuantumTime);
             p.CalcAgFactorAndCompleteTime(-1,-1);
