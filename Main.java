@@ -44,12 +44,13 @@ public class Main {
         for (Process process : sjfScheduler.complete_list) process.print();
         calcAverages(sjfScheduler.complete_list);
 
-        SRJF_Scheduler srjfScheduler = new SRJF_Scheduler();
-        srjfScheduler.schedule(processes);
+        SRTF_Scheduler srtfScheduler = new SRTF_Scheduler();
+        srtfScheduler.schedule(processes);
         System.out.println("\n\nShortest Remaining Job First Scheduling");
+        srtfScheduler.printExecutionOrder();
         System.out.println("Name    WaitingTime    TurnAroundTime");
-        for (Process process : srjfScheduler.complete_list) process.print();
-        calcAverages(srjfScheduler.complete_list);
+        for (Process process : srtfScheduler.complete_list) process.print();
+        calcAverages(srtfScheduler.complete_list);
 
         Priority_Scheduler priorityScheduler = new Priority_Scheduler();
         priorityScheduler.schedule(processes);
@@ -65,11 +66,11 @@ public class Main {
         System.out.println("Name    WaitingTime    TurnAroundTime");
         for (Process process : agScheduler.complete_list) process.print();
         calcAverages(agScheduler.complete_list);
-        System.out.println(agScheduler.execution_order);
-        GanttChartSwing gui = new GanttChartSwing(agScheduler, "AG Scheduler");
-        GanttChartSwing gui2 = new GanttChartSwing(sjfScheduler, "SJF Scheduler");
-        GanttChartSwing gui3 = new GanttChartSwing(priorityScheduler, "Priority Scheduler");
 
+        GanttChartSwing gui = new GanttChartSwing(sjfScheduler, "SJF Scheduler");
+        GanttChartSwing gui2 = new GanttChartSwing(srtfScheduler, "SRTF Scheduler");
+        GanttChartSwing gui3 = new GanttChartSwing(priorityScheduler, "Priority Scheduler");
+        GanttChartSwing gui4 = new GanttChartSwing(agScheduler, "AG Scheduler");
     }
     public static void calcAverages(Deque<Process> completeList) {
         double averageWaiting = 0, averageTurnaround = 0;

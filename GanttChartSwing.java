@@ -8,11 +8,10 @@ public class GanttChartSwing extends JFrame {
     String title;
     int maxTime;
     private JPanel[][] gridPanels;
-
     public GanttChartSwing(Scheduler sch, String title) {
         this.scheduler = sch;
         this.title = title;
-        this.maxTime = calculateMaxTime(scheduler.execution_order);
+        this.maxTime = scheduler.calculateMaxTime();
         initUI();
     }
 
@@ -76,19 +75,10 @@ public class GanttChartSwing extends JFrame {
             JLabel label = new JLabel("P" + i);
             curr.add(label);
         }
-        for (int i = 1; i <= maxTime; i++) {
+        for (int i = 1; i <= maxTime + 1; i++) {
             JPanel curr = gridPanels[0][i];
             JLabel label = new JLabel(String.valueOf(i-1));
             curr.add(label);
         }
-    }
-    private static int calculateMaxTime(Map<String, List<Pair>> mp) {
-        int maxTime = 0;
-        for (Map.Entry<String, List<Pair>> entry : mp.entrySet()) {
-            for (Pair pair: entry.getValue()) {
-                maxTime = Math.max(maxTime, pair.end);
-            }
-        }
-        return maxTime;
     }
 }

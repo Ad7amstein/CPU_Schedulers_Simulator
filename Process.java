@@ -14,6 +14,7 @@ public class Process {
     public int quantumTime;
     public int waitingTime;
     public int turnaroundTime;
+    public int starvation;
 
     Process(String Name, Color Color, int ArrivalTime, int BurstTime, int PriorityNumber, int QuantumTime) {
         this.name = Name;
@@ -25,6 +26,7 @@ public class Process {
         this.quantumTime = QuantumTime;
         waitingTime = 0;
         completeTime = 0;
+        starvation = 0;
     }
 
     void CalcAgFactorAndCompleteTime(int n, int m) {
@@ -57,10 +59,12 @@ public class Process {
         }
     }
     public void print() {
-        int waitingTime = completeTime - burstTime2 - arrivalTime,
-                turnAroundTime = waitingTime + burstTime2;
+        int turnAroundTime = completeTime - arrivalTime,  waitingTime = turnAroundTime - burstTime2;
         this.waitingTime = waitingTime;
         this.turnaroundTime = turnAroundTime;
         System.out.println(name + "           " + waitingTime + "              " + turnAroundTime);
     }
 }
+
+
+

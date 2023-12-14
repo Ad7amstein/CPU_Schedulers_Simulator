@@ -15,4 +15,32 @@ public class Scheduler
         }
         return null;
     }
+    public String getProcess(int startIndex){
+        for (Map.Entry<String, List<Pair>> entry : execution_order.entrySet()) {
+            for (Pair p: entry.getValue()) {
+                if(startIndex == p.start)return entry.getKey();
+            }
+        }
+        return "";
+    }
+    public int calculateMaxTime() {
+        Map<String, List<Pair>> mp = this.execution_order;
+        int maxTime = 0;
+        for (Map.Entry<String, List<Pair>> entry : mp.entrySet()) {
+            for (Pair pair: entry.getValue()) {
+                maxTime = Math.max(maxTime, pair.end);
+            }
+        }
+        return maxTime;
+    }
+    public int calculateMaxStart() {
+        Map<String, List<Pair>> mp = this.execution_order;
+        int maxTime = 0;
+        for (Map.Entry<String, List<Pair>> entry : mp.entrySet()) {
+            for (Pair pair: entry.getValue()) {
+                maxTime = Math.max(maxTime, pair.start);
+            }
+        }
+        return maxTime;
+    }
 }

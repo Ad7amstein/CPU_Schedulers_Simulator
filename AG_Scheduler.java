@@ -127,7 +127,6 @@ public class AG_Scheduler extends Scheduler{
         e = time;
         execution_order.computeIfAbsent(name, k -> new ArrayList<>()).add(new Pair(s, e));
     }
-
     void schedule(Deque<Process> Plist) {
         Iterator<Process> iterator = Plist.iterator();
 
