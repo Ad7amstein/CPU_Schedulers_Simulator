@@ -1,8 +1,9 @@
+import java.awt.*;
 import java.util.Random;
 
 public class Process {
     public String name;
-    public String color;
+    public Color color;
     public int arrivalTime;
     public int burstTime;
     public int burstTime2;
@@ -14,7 +15,7 @@ public class Process {
     public int waitingTime;
     public int turnaroundTime;
 
-    Process(String Name, String Color, int ArrivalTime, int BurstTime, int PriorityNumber, int QuantumTime) {
+    Process(String Name, Color Color, int ArrivalTime, int BurstTime, int PriorityNumber, int QuantumTime) {
         this.name = Name;
         this.color = Color;
         this.arrivalTime = ArrivalTime;

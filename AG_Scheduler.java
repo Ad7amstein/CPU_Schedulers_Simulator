@@ -130,7 +130,7 @@ public class AG_Scheduler{
 
         while (iterator.hasNext()) {
             Process element = iterator.next();
-            Process p = Main.copyProcess(element);
+            Process p = Scheduler.copyProcess(element);
             processes_list.addLast(p);
         }
         iterator = processes_list.iterator();
