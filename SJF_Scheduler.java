@@ -1,10 +1,9 @@
 import java.util.*;
 
-public class SJF_Scheduler{
+public class SJF_Scheduler extends Scheduler{
     int time = 0;
     int contextSwitching;
     Deque<Process> processes_list = new ArrayDeque<>();
-    Deque<Process> complete_list = new ArrayDeque<>();
 
     void schedule(Deque<Process> processes) {
         Iterator<Process> iterator = processes.iterator();
@@ -24,8 +23,12 @@ public class SJF_Scheduler{
             current = getProcesses(time);
             if(current.isEmpty())break;
             Collections.sort(current, Comparator.comparingInt(p -> p.burstTime));
+            int s, e;
+            s = time;
             time += current.get(0).burstTime;
             current.get(0).completeTime = time;
+            e = time;
+            execution_order.computeIfAbsent(current.get(0).name, k -> new ArrayList<>()).add(new Pair(s, e));
             time += contextSwitching;
             complete_list.add(current.get(0));
         }

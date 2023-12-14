@@ -1,12 +1,11 @@
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Iterator;
 
-public class Priority_Scheduler {
-    int currTime = 0;
+public class Priority_Scheduler extends Scheduler{
+    int time = 0;
     Deque<Process> processes_list = new ArrayDeque<>();
-    Deque<Process> complete_list = new ArrayDeque<>();
-
     void schedule(Deque<Process> processes) {
         Iterator<Process> iterator = processes.iterator();
 
@@ -19,9 +18,11 @@ public class Priority_Scheduler {
         while (true) {
             Process current = getNextProcess();
             if (current == null) break;
-
-            currTime += current.burstTime;
-            current.completeTime = currTime;
+            int s = time, e;
+            time += current.burstTime;
+            e = time;
+            execution_order.computeIfAbsent(current.name, k -> new ArrayList<>()).add(new Pair(s, e));
+            current.completeTime = time;
             complete_list.add(current);
         }
     }
@@ -30,7 +31,7 @@ public class Priority_Scheduler {
         Process selected = null;
         int highestPriority = Integer.MAX_VALUE;
         for (Process p : processes_list) {
-            if (p.arrivalTime <= currTime && p.completeTime == 0) {
+            if (p.arrivalTime <= time && p.completeTime == 0) {
                 p.aging();
                 if (p.priorityNumber < highestPriority) {
                     highestPriority = p.priorityNumber;

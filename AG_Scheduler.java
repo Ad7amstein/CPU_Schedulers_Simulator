@@ -1,17 +1,13 @@
-import java.util.Deque;
-import java.util.ArrayDeque;
-import java.util.Iterator;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Comparator;
+import java.security.KeyPair;
+import java.util.*;
 
-public class AG_Scheduler{
+public class AG_Scheduler extends Scheduler{
     Deque<Process> deq = new ArrayDeque<>();
     Deque<Process> readyQueue = new ArrayDeque<>();
     Process lead;
     int time = 0;
+    int contextSwitching;
     Deque<Process> processes_list = new ArrayDeque<>();
-    Deque<Process> complete_list = new ArrayDeque<>();
 
     void AddToQueue() {
         if (processes_list.isEmpty())
@@ -90,10 +86,15 @@ public class AG_Scheduler{
     }
 
     void select() {
+        int s, e;
+        String name;
         System.out.print(time + ":");
+        s = time;
         System.out.print("(" + lead.name + ")");
+        name = lead.name;
         int workTime = Math.min((lead.quantumTime + 1) / 2, lead.burstTime);
         time += workTime;
+
         lead.burstTime -= workTime;
         AddToQueue();
         if (workTime == lead.quantumTime) {
@@ -123,6 +124,8 @@ public class AG_Scheduler{
             lead.burstTime -= 1;
         }
         System.out.println(":" + time);
+        e = time;
+        execution_order.computeIfAbsent(name, k -> new ArrayList<>()).add(new Pair(s, e));
     }
 
     void schedule(Deque<Process> Plist) {

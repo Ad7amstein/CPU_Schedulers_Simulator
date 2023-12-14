@@ -56,11 +56,6 @@ public class Process {
             this.waitingTime++;
         }
     }
-
-    public int getPriority() {
-        return priorityNumber;
-    }
-
     public void print() {
         int waitingTime = completeTime - burstTime2 - arrivalTime,
                 turnAroundTime = waitingTime + burstTime2;

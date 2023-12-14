@@ -1,36 +1,41 @@
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Scanner;
-public class Main
-{
-    public static void main(String[] args)
-    {
+
+public class Main {
+    public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int NumberOfProcesses, QuantumTime, contextSwitching;
         Deque<Process> processes = new ArrayDeque<>();
         System.out.println("Enter Number of processes : ");
-        NumberOfProcesses =  scanner.nextInt();
+        NumberOfProcesses = scanner.nextInt();
         System.out.println("Enter Context Switching : ");
         contextSwitching = scanner.nextInt();
         System.out.println("Enter Number of QuantumTime : ");
-        QuantumTime =  scanner.nextInt();
+        QuantumTime = scanner.nextInt();
         System.out.println("Enter " + NumberOfProcesses + " processes in correct format :");
-        for(int i = 0 ;i < NumberOfProcesses ; i++)
-        {
-            scanner.nextLine() ;
+        for (int i = 0; i < NumberOfProcesses; i++) {
+            scanner.nextLine();
             System.out.print("Name: ");
-            String Name = scanner.nextLine() ;
-            //String Color = scanner.nextLine() ;
+            String Name = scanner.nextLine();
+            System.out.print("Pick a Color: ");
+            Color Color = JColorChooser.showDialog(null, "Choose color for " + Name, java.awt.Color.RED);
+            if(Color != null){
+                System.out.println(Color);
+            }
             System.out.print("Burst Time: ");
             int BurstTime = scanner.nextInt();
             System.out.print("Arrival Time: ");
             int ArrivalTime = scanner.nextInt();
             System.out.print("Priority Number: ");
             int PriorityNumber = scanner.nextInt();
-            Process p = new Process(Name , "Color" , ArrivalTime, BurstTime , PriorityNumber , QuantumTime);
-            p.CalcAgFactorAndCompleteTime(-1,-1);
+            Process p = new Process(Name, Color, ArrivalTime, BurstTime, PriorityNumber, QuantumTime);
+            p.CalcAgFactorAndCompleteTime(-1, -1);
             processes.addLast(p);
         }
+
         SJF_Scheduler sjfScheduler = new SJF_Scheduler();
         sjfScheduler.contextSwitching = contextSwitching;
         sjfScheduler.schedule(processes);
@@ -54,21 +59,24 @@ public class Main
         calcAverages(priorityScheduler.complete_list);
 
         AG_Scheduler agScheduler = new AG_Scheduler();
+        agScheduler.contextSwitching = contextSwitching;
         System.out.println("\n\nAG Scheduling");
         agScheduler.schedule(processes);
         System.out.println("Name    WaitingTime    TurnAroundTime");
         for (Process process : agScheduler.complete_list) process.print();
         calcAverages(agScheduler.complete_list);
+        System.out.println(agScheduler.execution_order);
+        GanttChartSwing gui = new GanttChartSwing(agScheduler, "AG Scheduler");
+        GanttChartSwing gui2 = new GanttChartSwing(sjfScheduler, "SJF Scheduler");
+        GanttChartSwing gui3 = new GanttChartSwing(priorityScheduler, "Priority Scheduler");
+
     }
-    public static void calcAverages(Deque<Process> completeList){
+    public static void calcAverages(Deque<Process> completeList) {
         double averageWaiting = 0, averageTurnaround = 0;
-        for (Process p: completeList){
+        for (Process p : completeList) {
             averageWaiting += p.waitingTime;
             averageTurnaround += p.turnaroundTime;
         }
         System.out.println("Average Waiting: " + averageWaiting / completeList.size() + "\nAverage Turnaround: " + averageTurnaround / completeList.size());
-    }
-    public static Process copyProcess(Process p){
-        return new Process(p.name, p.color, p.arrivalTime, p.burstTime, p.priorityNumber, p.quantumTime);
     }
 }
