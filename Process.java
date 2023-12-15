@@ -51,7 +51,7 @@ public class Process {
         return AGFactor;
     }
     public void aging(int currentTime) {
-        if (currentTime - arrivalTime >= 5) {
+        if (currentTime - arrivalTime >= 10) {
             this.priorityNumber--;
             this.waitingTime = 0;
         } else {
