@@ -7,7 +7,10 @@ public class Scheduler
     Map<String, List<Pair>> execution_order = new HashMap<>();
     Deque<Process> complete_list = new ArrayDeque<>();
     public static Process copyProcess(Process p){
-        return new Process(p.name, p.color, p.arrivalTime, p.burstTime, p.priorityNumber, p.quantumTime);
+        Process NewProcess = new Process(p.name, p.color, p.arrivalTime, p.burstTime, p.priorityNumber, p.quantumTime);
+        NewProcess.AGFactor = p.AGFactor;
+        NewProcess.randomNumber = p.randomNumber;
+        return NewProcess;
     }
     public Process getProcess(String name){
         for(Process p: complete_list){

@@ -18,6 +18,8 @@ public class AG_Scheduler extends Scheduler{
             if (time >= element.arrivalTime) {
                 deq.add(element);
                 iterator.remove();
+                if(lead != null && element.AGFactor > lead.AGFactor)
+                    readyQueue.add(element);
             }
         }
         sortAG();
@@ -135,18 +137,18 @@ public class AG_Scheduler extends Scheduler{
             Process p = Scheduler.copyProcess(element);
             processes_list.addLast(p);
         }
-        iterator = processes_list.iterator();
-        while (iterator.hasNext()) {
-            Process p2 = iterator.next();
-            if (p2.arrivalTime == 0)
-                p2.AGFactor = 20;
-            else if (p2.arrivalTime == 3)
-                p2.AGFactor = 17;
-            else if (p2.arrivalTime == 4)
-                p2.AGFactor = 16;
-            else if (p2.arrivalTime == 29)
-                p2.AGFactor = 43;
-        }
+//        iterator = processes_list.iterator();
+//        while (iterator.hasNext()) {
+//            Process p2 = iterator.next();
+//            if (p2.arrivalTime == 0)
+//                p2.AGFactor = 20;
+//            else if (p2.arrivalTime == 3)
+//                p2.AGFactor = 17;
+//            else if (p2.arrivalTime == 4)
+//                p2.AGFactor = 16;
+//            else if (p2.arrivalTime == 29)
+//                p2.AGFactor = 43;
+//        }
         int i = 0;
         while (!processes_list.isEmpty() || !deq.isEmpty() || lead != null) {
             AddToQueue();
