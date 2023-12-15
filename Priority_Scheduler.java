@@ -29,7 +29,10 @@ public class Priority_Scheduler extends Scheduler {
     }
     Process getNextProcess() {
         Process selected = null;
-        int highestPriority = Integer.MAX_VALUE;
+       int highestPriority = 0;
+        for (Process p1 : processes_list) {
+            highestPriority = Math.max(p1.priorityNumber, highestPriority);
+        }
         int maxArrivalTime = 0;
         for (Process p : processes_list) {
             maxArrivalTime = Math.max(p.arrivalTime, maxArrivalTime);
