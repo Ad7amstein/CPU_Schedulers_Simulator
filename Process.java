@@ -55,12 +55,8 @@ public class Process {
             if (priorityNumber > 1) {
                 this.priorityNumber--;
             }
-            this.waitingTime = 0;
-        } else {
-            this.waitingTime = currentTime - arrivalTime;
         }
     }
-
 
     public void print() {
         int turnAroundTime = completeTime - arrivalTime,  waitingTime = turnAroundTime - burstTime2;
