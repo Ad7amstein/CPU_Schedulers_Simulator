@@ -32,7 +32,7 @@ public class Priority_Scheduler extends Scheduler{
         int highestPriority = Integer.MAX_VALUE;
         for (Process p : processes_list) {
             if (p.arrivalTime <= time && p.completeTime == 0) {
-                p.aging();
+                p.aging(time);
                 if (p.priorityNumber < highestPriority) {
                     highestPriority = p.priorityNumber;
                     selected = p;
