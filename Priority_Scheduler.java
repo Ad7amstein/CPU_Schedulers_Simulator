@@ -3,9 +3,10 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Iterator;
 
-public class Priority_Scheduler extends Scheduler{
+public class Priority_Scheduler extends Scheduler {
     int time = 0;
     Deque<Process> processes_list = new ArrayDeque<>();
+
     void schedule(Deque<Process> processes) {
         Iterator<Process> iterator = processes.iterator();
 
@@ -26,14 +27,17 @@ public class Priority_Scheduler extends Scheduler{
             complete_list.add(current);
         }
     }
-
     Process getNextProcess() {
         Process selected = null;
         int highestPriority = Integer.MAX_VALUE;
+        int maxArrivalTime = 0;
+        for (Process p : processes_list) {
+            maxArrivalTime = Math.max(p.arrivalTime, maxArrivalTime);
+        }
         for (Process p : processes_list) {
             if (p.arrivalTime <= time && p.completeTime == 0) {
                 p.aging(time);
-                if (p.priorityNumber < highestPriority) {
+                if (p.priorityNumber < highestPriority || (p.priorityNumber == highestPriority && p.arrivalTime < maxArrivalTime)) {
                     highestPriority = p.priorityNumber;
                     selected = p;
                 }

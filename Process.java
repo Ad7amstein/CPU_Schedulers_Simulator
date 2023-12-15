@@ -52,12 +52,16 @@ public class Process {
     }
     public void aging(int currentTime) {
         if (currentTime - arrivalTime >= 10) {
-            this.priorityNumber--;
+            if (priorityNumber > 1) {
+                this.priorityNumber--;
+            }
             this.waitingTime = 0;
         } else {
             this.waitingTime = currentTime - arrivalTime;
         }
     }
+
+
     public void print() {
         int turnAroundTime = completeTime - arrivalTime,  waitingTime = turnAroundTime - burstTime2;
         this.waitingTime = waitingTime;
